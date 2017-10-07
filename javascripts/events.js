@@ -14,7 +14,12 @@ const createDomString = (catz) => {
 		myCat +=     `<h3> ${catz[i].name} </h3>`;
 		myCat +=     `<p> Color: ${catz[i].color} </p>`;
 		myCat +=     `<p> Skills: ${catz[i].specialSkill} </p>`;
-		myCat +=     `<p class="disabled-cat"> Toes: ${catz[i].numberOfToes} </p>`;
+		if(catz[i].numberOfToes >= 10){
+			myCat +=     `<p class="disabled-cat"> Toes: ${catz[i].numberOfToes} </p>`;
+		} else {
+			myCat += `<p>Toes: ${catz[i]. numberOfToes}</p>`;
+		}
+		
 		myCat +=   `</div>`;
 		myCat += `</div>` ;
         catString += myCat;
@@ -26,23 +31,37 @@ const printToDom = (string) => {
 	$('#catHolder').html(string);
 };
 
+
 $('#catInput').keypress((event) => {
 	console.log(event);
 	if(event.key === 'Enter'){
-		console.log($('#catInput').val());
 		let txt = $('#catInput').val();
+		console.log($('#catInput').val());
 		$.get(`https://random-dogs-api.herokuapp.com/cats/${txt}`, (cats) =>{
 			console.log("cats", cats);
 			createDomString(cats.cats);
 			$('.search').toggleClass('hidden');
 		});
-	// 	let catData = cats.getCats();
- //        let results = catData.filter(function(thing){
- //            return thing.name.indexOf(txt)>-1;
-	//  	});
-	// createDomString(results);
-	// $('.planetName').removeClass('hidden');
 	}
+
 });
+
+ $(`#submitButton`).click((event) => {
+ 	console.log("submit", event);
+	let txt = $('#catInput').val();
+ 	$.get(`https://random-dogs-api.herokuapp.com/cats/${txt}`, (cats) =>{
+ 		console.log("cats");
+ 		createDomString(cats.cats);
+ 		$('.search').toggleClass('hidden');
+ 	});
+ });
+
+ $('.disableButton').click(() => {
+   $('.disabled-cat').parent().parent().addClass('hidden');
+});
+
+ const hide = () => {
+  $('.disableButton').removeClass('hidden');
+};
 
 // module.exports = {};
